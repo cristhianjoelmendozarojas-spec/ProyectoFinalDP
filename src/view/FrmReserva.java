@@ -9,31 +9,29 @@ import javax.swing.JOptionPane;
 import model.entities.Laboratorio;
 import model.entities.Reserva;
 
-
 public class FrmReserva extends javax.swing.JFrame {
-    
+
     private Laboratorio laboratorio;
     private List<String> horarios = new ArrayList<>();
 
     public FrmReserva(Laboratorio laboratorio) {
         initComponents();
-        this.laboratorio = laboratorio; 
+        this.laboratorio = laboratorio;
         // Mostrar datos del laboratorio
         jLabel5.setText(laboratorio.getNombre());
-        jLabel6.setText(String.valueOf(laboratorio.getCapacidad())); 
-        jLabel7.setText(laboratorio.getEstado()); 
-        
+        jLabel6.setText(String.valueOf(laboratorio.getCapacidad()));
+        jLabel7.setText(laboratorio.getEstado());
+
         //IDLABORATORIO
         jLabel11.setText(String.valueOf(laboratorio.getId()));
         jLabel11.setVisible(false);
         // Configuración de horas 
-        cbHoraInicio.addActionListener(e -> actualizarHorasFin()); 
-        cargarHorasReserva(); 
-        actualizarHorasFin(); 
+        cbHoraInicio.addActionListener(e -> actualizarHorasFin());
+        cargarHorasReserva();
+        actualizarHorasFin();
         setLocationRelativeTo(null);
-     
+
     }
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -197,11 +195,12 @@ public class FrmReserva extends javax.swing.JFrame {
             LocalTime horaInicio = LocalTime.parse(cbHoraInicio.getSelectedItem().toString());
             LocalTime horaFin = LocalTime.parse(cbHoraFin.getSelectedItem().toString());
 // Crear reserva Reserva r = new Reserva(idUsuario, idLab, fecha, horaInicio, horaFin); 
-Reserva r = new Reserva(idUsuario, idLab, fecha, horaInicio,horaFin);            
-GestorReservas controller = new GestorReservas();
+            Reserva r = new Reserva(idUsuario, idLab, fecha, horaInicio, horaFin);
+            GestorReservas controller = new GestorReservas();
             if (controller.realizarReserva(r)) {
                 JOptionPane.showMessageDialog(this, "Reserva realizada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Error al registrar la reserva", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -209,42 +208,43 @@ GestorReservas controller = new GestorReservas();
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ocurrió un error al registrar la reserva", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    
+
 
     }//GEN-LAST:event_btnGuardarReservaActionPerformed
 
-   private void cargarHorasReserva() {
-    cbHoraInicio.removeAllItems();
-    horarios.clear();
-    int inicio = 7 * 60 + 30;
-    int fin = 23 * 60 + 30;
-    for (int t = inicio; t <= fin; t += 30) {
-        int h = t / 60;
-        int m = t % 60;
-        String tiempo = String.format("%02d:%02d", h, m);
-        horarios.add(tiempo);
-        cbHoraInicio.addItem(tiempo);
+    private void cargarHorasReserva() {
+        cbHoraInicio.removeAllItems();
+        horarios.clear();
+        int inicio = 7 * 60 + 30;
+        int fin = 23 * 60 + 30;
+        for (int t = inicio; t <= fin; t += 30) {
+            int h = t / 60;
+            int m = t % 60;
+            String tiempo = String.format("%02d:%02d", h, m);
+            horarios.add(tiempo);
+            cbHoraInicio.addItem(tiempo);
 
+        }
     }
-}
-private void actualizarHorasFin() {
 
-    cbHoraFin.removeAllItems();
-    int posInicio = cbHoraInicio.getSelectedIndex();
+    private void actualizarHorasFin() {
+
+        cbHoraFin.removeAllItems();
+        int posInicio = cbHoraInicio.getSelectedIndex();
 
 // Si no hay una hora de inicio seleccionada, no continuar 
-    if (posInicio == -1) {
-        return;
-    }
+        if (posInicio == -1) {
+            return;
+        }
 // Reserva mínima 1 hora -> 2 posiciones adelante
-    int minPos = posInicio + 2;
+        int minPos = posInicio + 2;
 // Reserva máxima 4 horas -> 8 posiciones adelante 
-    int maxPos = posInicio + 8;
-    maxPos = Math.min(maxPos, horarios.size() - 1);
-    for (int i = minPos; i <= maxPos; i++) {
-        cbHoraFin.addItem(horarios.get(i));
+        int maxPos = posInicio + 8;
+        maxPos = Math.min(maxPos, horarios.size() - 1);
+        for (int i = minPos; i <= maxPos; i++) {
+            cbHoraFin.addItem(horarios.get(i));
+        }
     }
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarReserva;
