@@ -8,24 +8,45 @@ import java.util.List;
 
 public class LaboratorioDAO {
 
-    public List<Laboratorio> listarTodos() {
-        List<Laboratorio> lista = new ArrayList<>();
-        String sql = "Select * from vista_listar_laboratorios";
-        try (Connection con = ConexionBD.getInstancia().getConexion();
-             PreparedStatement pst = con.prepareStatement(sql);
-             ResultSet rs = pst.executeQuery()) {
+    public List<Laboratorio> obtenerLaboratorios() {
+        List<Laboratorio> laboratorios = new ArrayList<>();
+        String sql = "SELECT * FROM vista_listar_laboratorios";
+
+        try (Connection con = ConexionBD.getInstancia().getConexion(); Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                lista.add(new Laboratorio(
-                    rs.getInt("id_laboratorio"),
-                    rs.getString("nombre"),
-                    rs.getInt("capacidad"),
-                    rs.getString("estado")
-                ));
+                Laboratorio lab = new Laboratorio();
+                lab.setId(rs.getInt("id_laboratorio"));
+                lab.setNombre(rs.getString("nombre"));
+                lab.setCapacidad(rs.getInt("capacidad"));
+                lab.setEstado(rs.getString("estado"));
+
+                laboratorios.add(lab);
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return lista;
+        return laboratorios;
+    }
+
+    public Laboratorio obtenerLaboratorioPorId(int idLaboratorio) throws SQLException {
+        String sql = "SELECT * FROM vista_listar_laboratorios WHERE id_laboratorio = ?";
+
+        try (Connection con = ConexionBD.getInstancia().getConexion(); PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setInt(1, idLaboratorio);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                Laboratorio lab = new Laboratorio();
+                lab.setId(rs.getInt("id_laboratorio"));
+                lab.setNombre(rs.getString("nombre"));
+                lab.setCapacidad(rs.getInt("capacidad"));
+                lab.setEstado(rs.getString("estado"));
+
+                return lab;
+            }
+        }
+        return null;
     }
 }

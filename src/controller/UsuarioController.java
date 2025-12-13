@@ -1,13 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
-/**
- *
- * @author Cristhian
- */
+import model.dao.UsuarioDAO;
+import model.entities.Usuario;
+
 public class UsuarioController {
-    
+
+    private final UsuarioDAO usuarioDAO = new UsuarioDAO();
+
+    public Usuario autenticarUsuario(String idUsuario, String clave) {
+        return usuarioDAO.login(idUsuario, clave);
+    }
+
+    public Usuario obtenerPorId(String idUsuario) {
+        return usuarioDAO.obtenerUsuarioPorId(idUsuario);
+    }
+
 }

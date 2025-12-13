@@ -1,13 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.strategy;
 
-/**
- *
- * @author Cristhian
- */
-public class ValidacionDuracion {
-    
+import model.entities.Reserva;
+import java.time.Duration;
+
+public class ValidacionDuracion implements ValidacionStrategy {
+
+    @Override
+    public boolean validar(Reserva reserva) {
+        Duration duracion = Duration.between(reserva.getHoraInicio(), reserva.getHoraFin());
+        long minutos = duracion.toMinutes();
+
+      return minutos >= 30 && minutos <= 240;
+    }
+
+    @Override
+    public String getMensajeError() {
+        return "La duración debe ser entre 30 minutos y 4 horas";
+    }
 }

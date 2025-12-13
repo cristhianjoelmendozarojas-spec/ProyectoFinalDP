@@ -6,33 +6,43 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import model.entities.Laboratorio;
-import model.entities.Reserva;
+import model.entities.*;
+import model.observer.SujetoNotificacion;
+import view.FrmDetalleReserva;
+import view.FrmMenuPrincipal;
 
 public class FrmReserva extends javax.swing.JFrame {
-
+    
     private Laboratorio laboratorio;
+    private Usuario usuario;
+    private FrmMenuPrincipal menuPrincipal;
+    private SujetoNotificacion sujetoNotificacion;
+    private Reserva reservaExistente;
     private List<String> horarios = new ArrayList<>();
-
-    public FrmReserva(Laboratorio laboratorio) {
+    
+    public FrmReserva(Usuario usuario, Laboratorio laboratorio, FrmMenuPrincipal menuPrincipal) {
         initComponents();
+        this.usuario = usuario;
         this.laboratorio = laboratorio;
-        // Mostrar datos del laboratorio
+        this.menuPrincipal = menuPrincipal;
+        this.sujetoNotificacion = new SujetoNotificacion();
+        this.reservaExistente = reservaExistente;
+
+        // Mostrar laboratorio
         jLabel5.setText(laboratorio.getNombre());
         jLabel6.setText(String.valueOf(laboratorio.getCapacidad()));
         jLabel7.setText(laboratorio.getEstado());
-
-        //IDLABORATORIO
         jLabel11.setText(String.valueOf(laboratorio.getId()));
         jLabel11.setVisible(false);
-        // Configuración de horas 
+
+        // Configurar horas
         cbHoraInicio.addActionListener(e -> actualizarHorasFin());
         cargarHorasReserva();
         actualizarHorasFin();
         setLocationRelativeTo(null);
-
+        
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -53,165 +63,169 @@ public class FrmReserva extends javax.swing.JFrame {
         btnGuardarReserva = new javax.swing.JButton();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jLabel11 = new javax.swing.JLabel();
+        btncancelar = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("RESERVA");
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
         jLabel1.setText("Seleccione Fecha:");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 200, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
         jLabel2.setText("Capacidad:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 60, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
         jLabel3.setText("Estado:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, -1, -1));
 
+        jLabel5.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(102, 102, 102));
         jLabel5.setText("jLabel5");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 30, -1, -1));
 
+        jLabel6.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(102, 102, 102));
         jLabel6.setText("jLabel6");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, -1, -1));
 
+        jLabel7.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(102, 102, 102));
         jLabel7.setText("jLabel7");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 90, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
         jLabel4.setText("Laboratorio:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 30, -1, -1));
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
         jLabel8.setText("Hora Inicio:");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 280, -1, -1));
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
         jLabel9.setText("Hora Fin:");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 280, -1, -1));
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        getContentPane().add(cbHoraInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, 105, -1));
+
+        getContentPane().add(cbHoraFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 310, 105, -1));
+        getContentPane().add(filler1, new org.netbeans.lib.awtextra.AbsoluteConstraints(42, 137, 579, -1));
+
+        jLabel10.setFont(new java.awt.Font("Roboto Black", 1, 14)); // NOI18N
         jLabel10.setText("Reserva minima 01 hora - maxima 04 Horas");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 140, -1, -1));
 
+        btnGuardarReserva.setBackground(new java.awt.Color(23, 85, 166));
+        btnGuardarReserva.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
+        btnGuardarReserva.setForeground(new java.awt.Color(255, 255, 255));
         btnGuardarReserva.setText("Guardar Reserva");
         btnGuardarReserva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarReservaActionPerformed(evt);
             }
         });
+        getContentPane().add(btnGuardarReserva, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 400, 120, 30));
+        getContentPane().add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 230, 135, -1));
 
         jLabel11.setText("jLabel11");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 10, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addGap(27, 27, 27)
-                            .addComponent(jLabel6))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addGap(46, 46, 46)
-                            .addComponent(jLabel7))
-                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(249, 249, 249)
-                            .addComponent(btnGuardarReserva)
-                            .addGap(32, 32, 32)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(34, 34, 34)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addGap(80, 80, 80)
-                                        .addComponent(jLabel9))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(cbHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(38, 38, 38)
-                                        .addComponent(cbHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jLabel10)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel5))))
-                        .addContainerGap())))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel6))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel7))
-                .addGap(18, 18, 18)
-                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21)
-                .addComponent(jLabel10)
-                .addGap(41, 41, 41)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(9, 9, 9)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
-                .addComponent(btnGuardarReserva)
-                .addGap(55, 55, 55))
-        );
+        btncancelar.setBackground(new java.awt.Color(23, 85, 166));
+        btncancelar.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
+        btncancelar.setForeground(new java.awt.Color(255, 255, 255));
+        btncancelar.setText("Cancelar");
+        btncancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncancelarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(399, 400, 120, 30));
+
+        jPanel2.setBackground(new java.awt.Color(23, 85, 166));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/login.png"))); // NOI18N
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 130, -1));
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 450));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarReservaActionPerformed
-        try {
-            int idUsuario = 1; // valor temporal hasta tener login real
-            int idLab = laboratorio.getId();
-            if (jDateChooser1.getDate() == null) {
-                JOptionPane.showMessageDialog(this, "Seleccione una fecha valida.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+try {
+    if (usuario == null || laboratorio == null) {
+        JOptionPane.showMessageDialog(this, "Sesión inválida.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-            }
-            LocalDate fecha = jDateChooser1.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-            LocalTime horaInicio = LocalTime.parse(cbHoraInicio.getSelectedItem().toString());
-            LocalTime horaFin = LocalTime.parse(cbHoraFin.getSelectedItem().toString());
-// Crear reserva Reserva r = new Reserva(idUsuario, idLab, fecha, horaInicio, horaFin); 
-            Reserva r = new Reserva(idUsuario, idLab, fecha, horaInicio, horaFin);
-            GestorReservas controller = new GestorReservas();
-            if (controller.realizarReserva(r)) {
-                JOptionPane.showMessageDialog(this, "Reserva realizada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose();
-                
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al registrar la reserva", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Ocurrió un error al registrar la reserva", "Error", JOptionPane.ERROR_MESSAGE);
+    if (jDateChooser1.getDate() == null) {
+        JOptionPane.showMessageDialog(this, "Seleccione una fecha válida.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    String idUsuario = usuario.getIdUsuario();
+    int idLab = laboratorio.getId();
+    LocalDate fecha = jDateChooser1.getDate().toInstant()
+            .atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+    LocalTime horaInicio = LocalTime.parse(cbHoraInicio.getSelectedItem().toString());
+    LocalTime horaFin = LocalTime.parse(cbHoraFin.getSelectedItem().toString());
+
+    GestorReservas gestor = GestorReservas.getInstancia();
+
+    Reserva reservaExistente = gestor.getReservaActiva(idLab, idUsuario, fecha);
+
+    Reserva r;
+    boolean exito;
+
+    if (reservaExistente != null) {
+        if ("Estudiante".equalsIgnoreCase(usuario.getTipo())) {
+            JOptionPane.showMessageDialog(this,
+                    "No puede modificar esta reserva.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
+        if ("Docente".equalsIgnoreCase(usuario.getTipo())) {
+            r = reservaExistente;
+            r.setFecha(fecha);
+            r.setHoraInicio(horaInicio);
+            r.setHoraFin(horaFin);
+            r.setIdUsuario(idUsuario);
+            exito = gestor.actualizarReserva(r);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "No puede modificar esta reserva.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    } else {
+        r = new Reserva(idUsuario, idLab, fecha, horaInicio, horaFin);
+        exito = gestor.realizarReserva(r);
+    }
 
-    }//GEN-LAST:event_btnGuardarReservaActionPerformed
+    if (exito) {
+        FrmDetalleReserva detalle = new FrmDetalleReserva(r, menuPrincipal);
+        detalle.setVisible(true);
+        dispose();
+    } else {
+        JOptionPane.showMessageDialog(this, "No se pudo procesar la reserva\n Horas se cruzan con otra reserva.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
+} catch (Exception ex) {
+    ex.printStackTrace();
+    JOptionPane.showMessageDialog(this, "Ocurrió un error al procesar la reserva", "Error", JOptionPane.ERROR_MESSAGE);
+
+
+}
+
+    }
     private void cargarHorasReserva() {
         cbHoraInicio.removeAllItems();
         horarios.clear();
@@ -223,31 +237,34 @@ public class FrmReserva extends javax.swing.JFrame {
             String tiempo = String.format("%02d:%02d", h, m);
             horarios.add(tiempo);
             cbHoraInicio.addItem(tiempo);
-
         }
     }
-
+    
     private void actualizarHorasFin() {
-
         cbHoraFin.removeAllItems();
         int posInicio = cbHoraInicio.getSelectedIndex();
-
-// Si no hay una hora de inicio seleccionada, no continuar 
+        
         if (posInicio == -1) {
             return;
         }
-// Reserva mínima 1 hora -> 2 posiciones adelante
+        
         int minPos = posInicio + 2;
-// Reserva máxima 4 horas -> 8 posiciones adelante 
         int maxPos = posInicio + 8;
         maxPos = Math.min(maxPos, horarios.size() - 1);
         for (int i = minPos; i <= maxPos; i++) {
             cbHoraFin.addItem(horarios.get(i));
         }
-    }
+
+    }//GEN-LAST:event_btnGuardarReservaActionPerformed
+
+    private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_btncancelarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarReserva;
+    private javax.swing.JButton btncancelar;
     private javax.swing.JComboBox<String> cbHoraFin;
     private javax.swing.JComboBox<String> cbHoraInicio;
     private javax.swing.Box.Filler filler1;
@@ -255,6 +272,7 @@ public class FrmReserva extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -263,5 +281,6 @@ public class FrmReserva extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }

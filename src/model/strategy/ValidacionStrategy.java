@@ -1,10 +1,10 @@
-
 package model.strategy;
 
+import model.entities.Reserva;
 
 public interface ValidacionStrategy {
-    
-        boolean validar();
-        String getMensaje();
-    }
 
+    boolean validar(Reserva reserva);
+
+    String getMensajeError();
+}
